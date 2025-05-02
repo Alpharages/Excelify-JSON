@@ -1,14 +1,21 @@
-import pino from 'pino';
+import { pino } from 'pino';
+import { Request } from 'express';
 
 /**
  * Determines if the application is running in development mode
  * @type {boolean}
  */
-const isDevelopment = process.env.NODE_ENV !== 'production';
+const isDevelopment: boolean = process.env.NODE_ENV !== 'production';
 
 /**
- * Configures the transport for development environment with pretty printing
- * @type {Object|undefined}
+ * Configuration for the logger transport
+ * In development mode:
+ * - Uses pino-pretty for formatted output
+ * - Enables colorization
+ * - Shows log level first
+ * - Formats timestamps using system standard
+ * In production mode:
+ * - Uses default JSON transport
  */
 const transport = isDevelopment
   ? {
@@ -16,15 +23,20 @@ const transport = isDevelopment
       options: {
         colorize: true,
         levelFirst: true,
-        translateTime: 'SYS:standard',
+        translateTime: "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'",
+      },
+      autoLogging: {
+        ignore: (req: Request) => req.url === '/health' || req.url === '/metrics',
+      },
+      redact: {
+        paths: ['req.headers.authorization'],
+        remove: true,
       },
     }
   : undefined;
 
 /**
  * Creates and configures the Pino logger instance
- * @type {pino.Logger}
- *
  * Configuration:
  * - Development: Uses pretty printing with colors and debug level
  * - Production: Uses JSON format with info level
