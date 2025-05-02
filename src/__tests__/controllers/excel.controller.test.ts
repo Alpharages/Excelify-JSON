@@ -1,5 +1,5 @@
-import { ExcelController } from '../../controllers/excel.controller';
-import { mockRequest, mockResponse, mockNext, createMockExcelBuffer } from '../helpers/test.helper';
+import { ExcelController } from '../../controllers/excel.controller.js';
+import { mockRequest, mockResponse, mockNext, createMockExcelBuffer } from '../helpers/test.helper.js';
 
 describe('ExcelController', () => {
   describe('convertToJson', () => {

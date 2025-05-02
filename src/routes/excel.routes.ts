@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { ExcelController } from '../controllers/excel.controller';
+import { ExcelController } from '../controllers/excel.controller.js';
 
-const router = Router();
+const router: Router = Router();
 
 // Configure multer for memory storage
 const upload = multer({

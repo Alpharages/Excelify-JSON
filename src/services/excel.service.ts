@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx';
-import { ExcelResponse, ExcelMetadata } from '@/types/excel.types';
-import logger from '../config/logger.config';
+import { ExcelResponse, ExcelMetadata } from '../types/excel.types.js';
+import logger from '../config/logger.config.js';
 
 /**
  * Service class for handling Excel file processing and conversion to JSON

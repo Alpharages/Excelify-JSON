@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ExcelError } from '../../types/excel.types';
+import { ExcelError } from '../../types/excel.types.js';
 import * as XLSX from 'xlsx';
 
 export const mockRequest = (file?: Express.Multer.File) => {

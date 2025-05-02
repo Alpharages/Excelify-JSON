@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { ExcelService } from '../services/excel.service';
-import { ExcelError } from '../types/excel.types';
+import { ExcelService } from '../services/excel.service.js';
+import { ExcelError } from '../types/excel.types.js';
 
 export class ExcelController {
   public static async convertToJson(

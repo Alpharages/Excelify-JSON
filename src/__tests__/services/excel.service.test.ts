@@ -1,5 +1,5 @@
-import { ExcelService } from '../../services/excel.service';
-import { createMockExcelBuffer } from '../helpers/test.helper';
+import { ExcelService } from '../../services/excel.service.js';
+import { createMockExcelBuffer } from '../helpers/test.helper.js';
 import * as XLSX from 'xlsx';
 
 describe('ExcelService', () => {

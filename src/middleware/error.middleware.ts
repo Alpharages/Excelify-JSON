@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { ExcelError } from '@/types/excel.types';
+import { ExcelError } from '../types/excel.types.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const errorHandler = (err: ExcelError, req: Request, res: Response, next: NextFunction) => {
