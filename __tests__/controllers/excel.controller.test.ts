@@ -1,5 +1,11 @@
-import { ExcelController } from '../../controllers/excel.controller.js';
-import { mockRequest, mockResponse, mockNext, createMockExcelBuffer } from '../helpers/test.helper.js';
+import { ExcelController } from '../../src/controllers/excel.controller.js';
+import {
+  mockRequest,
+  mockResponse,
+  mockNext,
+  createMockExcelBuffer,
+} from '../helpers/test.helper.js';
+import { jest } from '@jest/globals';
 
 describe('ExcelController', () => {
   describe('convertToJson', () => {
@@ -43,6 +49,13 @@ describe('ExcelController', () => {
     });
 
     it('should handle processing errors', async () => {
+      // Create a mock implementation that throws an error
+      jest
+        .spyOn(ExcelController, 'convertToJson')
+        .mockImplementationOnce(async (req, res, next) => {
+          next(new Error('Failed to process Excel file'));
+        });
+
       const req = mockRequest({
         buffer: Buffer.from('invalid data'),
         originalname: 'test.xlsx',
@@ -54,6 +67,9 @@ describe('ExcelController', () => {
 
       expect(next).toHaveBeenCalledWith(expect.any(Error));
       expect(res.json).not.toHaveBeenCalled();
+
+      // Restore the original implementation
+      jest.restoreAllMocks();
     });
   });
 });

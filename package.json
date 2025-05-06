@@ -1,7 +1,7 @@
 {
   "name": "excelify-json",
   "version": "1.0.0",
-  "description": "A RESTful API service that converts Excel files to structured JSON data",
+  "description": "A Restful API service that converts Excel files to structured JSON data",
   "type": "module",
   "main": "dist/index.js",
   "exports": {
@@ -33,6 +33,7 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@jest/globals": "^29.7.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/jest": "^29.5.14",
@@ -54,9 +55,5 @@
     "ts-jest": "^29.3.2",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
-  },
-  "engines": {
-    "node": ">=22.0.0",
-    "pnpm": ">=10.0.0"
   }
 }

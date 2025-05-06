@@ -1,8 +1,8 @@
 import request from 'supertest';
-import { app } from '../../index.js';
-import { excelRouter } from '@/routes/excel.routes';
-import { errorHandler } from '@/middleware/error.middleware';
+import { errorHandler } from '../../src/middleware/error.middleware.js';
 import { createMockExcelBuffer } from '../helpers/test.helper.js';
+import express from 'express';
+import { excelRouter } from '../../src/routes/excel.routes.js';
 
 describe('API Endpoints', () => {
   let app: express.Application;

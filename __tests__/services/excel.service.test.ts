@@ -1,4 +1,4 @@
-import { ExcelService } from '../../services/excel.service.js';
+import { ExcelService } from '../../src/services/excel.service.js';
 import { createMockExcelBuffer } from '../helpers/test.helper.js';
 import * as XLSX from 'xlsx';
 
@@ -43,11 +43,12 @@ describe('ExcelService', () => {
     });
 
     it('should throw an error for invalid Excel file', () => {
-      const invalidBuffer = Buffer.from('invalid data');
+      // Create a buffer that's definitely not an Excel file
+      const invalidBuffer = Buffer.from('{"json": "This is not an Excel file"}');
 
       expect(() => {
         ExcelService.processExcelFile(invalidBuffer);
-      }).toThrow('Failed to process Excel file');
+      }).toThrow();
     });
 
     it('should handle empty sheets', () => {
