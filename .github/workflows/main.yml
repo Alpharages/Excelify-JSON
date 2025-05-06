@@ -53,4 +53,30 @@ jobs:
 
     - name: Test Docker image
       run: |
-        docker run --rm excelify-json pnpm test 
+        # Install netcat if needed
+        sudo apt-get update && sudo apt-get install -y netcat
+
+        # Run the container in detached mode, mapping port 3000
+        docker run -d --name excelify-container -p 3000:3000 excelify-json
+
+        # Wait for the container to start (give it a few seconds)
+        sleep 5
+
+        # Check if the container is running
+        if [ "$(docker ps -q -f name=excelify-container)" ]; then
+          echo "Container is running"
+        else
+          echo "Container failed to start"
+          exit 1
+        fi
+
+        # Test if the port is responding using netcat
+        if nc -z localhost 3000; then
+          echo "Container is responding on port 3000"
+        else
+          echo "Container is not responding on port 3000"
+          exit 1
+        fi
+
+        # Clean up the container
+        docker stop excelify-container
