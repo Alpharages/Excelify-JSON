@@ -17,6 +17,11 @@ app.use(requestLogger);
 // Routes
 app.use('/api/v1', excelRouter);
 
+// Health check route
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
 // Error handling
 app.use(errorLogger);
 app.use(errorHandler);
