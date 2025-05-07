@@ -1,30 +1,38 @@
-# Use Node.js 22 as the base image
-FROM node:22-alpine
+# Stage 1: Build the app
+FROM node:22-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
-
-# Copy package files
+# Enable corepack and prepare pnpm
 COPY package.json pnpm-lock.yaml ./
+RUN corepack enable && corepack prepare pnpm@latest --activate && pnpm install --frozen-lockfile
 
-# Install dependencies
-RUN pnpm install --frozen-lockfile
-
-# Copy source code
+# Copy source code and build
 COPY . .
-
-# Build the application
 RUN pnpm build
 
-# Expose the port the app runs on
+# Stage 2: Run the app in a minimal environment
+FROM node:22-alpine
+
+WORKDIR /app
+
+# Enable corepack and prepare pnpm (optional if you use only built output)
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+# Copy only necessary files from builder
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/pnpm-lock.yaml ./
+COPY --from=builder /app/dist ./dist
+
+# Install only production dependencies
+RUN pnpm install --frozen-lockfile
+
+# Expose app port
 EXPOSE ${PORT:-3000}
 
-# Add healthcheck
+# Healthcheck
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT:-3000}/health || exit 1
+    CMD curl -f http://localhost:${PORT:-3000}/health || exit 1
 
-# Start the application
-CMD ["pnpm", "start"] 
+# Start the app
+CMD ["pnpm", "start"]

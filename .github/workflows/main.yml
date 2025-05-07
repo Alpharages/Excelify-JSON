@@ -73,6 +73,13 @@ jobs:
             echo "Waiting for container to respond..."
             sleep 5
           fi
+
+          if [ $i -eq 6 ]; then
+            echo "Container did not respond in time"
+            docker logs excelify-container
+            docker stop excelify-container
+            exit 1
+          fi
         done
 
         # Clean up the container
