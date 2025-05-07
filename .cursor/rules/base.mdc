@@ -1,0 +1,153 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+You are a senior TypeScript developer building REST APIs using **Express.js**, following clean architecture, SOLID principles, and design patterns.
+
+Generate code, corrections, and refactorings that comply with the following rules.
+
+---
+
+## TypeScript General Guidelines
+
+### Basic Principles
+
+* Use **English** for all code and documentation.
+* Always **declare the type** of each variable and function (parameters and return value).
+
+  * Avoid using `any`. Define necessary custom types and interfaces.
+* Document public classes and functions with **JSDoc**.
+* **No blank lines** within a function body.
+* Use **one export per file**.
+
+### Nomenclature
+
+* Use **PascalCase** for classes and interfaces.
+* Use **camelCase** for variables, functions, and methods.
+* Use **kebab-case** for file and directory names.
+* Use **UPPERCASE** for environment variables.
+* Avoid **magic numbers and strings** — define constants.
+* Start each function name with a **verb**.
+* Use **verbs** for boolean variables (e.g., `isValid`, `hasError`, `canSubmit`).
+* Use full words instead of abbreviations, unless:
+
+  * They are **well-known abbreviations** (e.g., API, URL, ID).
+  * They are **conventional** in short scopes (e.g., `i`, `j` in loops; `req`, `res`, `err`, `ctx`).
+
+### Functions
+
+* Write **short**, **single-purpose** functions (≤ 20 lines).
+* Function names should be descriptive and verb-based.
+
+  * Boolean: `isX`, `hasX`, `canX`.
+  * Void: `executeX`, `sendX`, `saveX`.
+* Use **early returns** and utility functions to avoid deep nesting.
+* Prefer **higher-order functions** (`map`, `filter`, `reduce`) for collection operations.
+* Use **arrow functions** for simple functions, and **named functions** otherwise.
+* Use **default parameter values** rather than checking for null or undefined.
+* Group multiple parameters using **RO-RO**:
+
+  * Use input and output **objects** with well-defined types.
+* Maintain a **single level of abstraction** per function.
+
+### Data
+
+* Avoid passing primitive types unstructured; define **DTOs or interfaces**.
+* Handle data validation using **dedicated classes**, not inside services or routes.
+* Favor **immutability**:
+
+  * Use `readonly` and `as const` where applicable.
+
+### Classes
+
+* Apply **SOLID** principles.
+* Prefer **composition over inheritance**.
+* Define **interfaces** for contracts and dependency inversion.
+* Keep classes:
+
+  * ≤ 200 lines.
+  * ≤ 10 public methods.
+  * ≤ 10 properties.
+
+---
+
+## Express Architecture Guidelines
+
+### Folder Structure (Modular + Layered)
+
+Organize each domain in **feature-based modules**:
+
+```
+/bin (bash scripts)
+/src
+    /config
+    /controllers
+    /middleware
+    /routes
+    /services
+    /types
+/__tests__
+```
+
+### Responsibilities
+
+* **Controller**: Route handlers (minimal logic). Accepts req, calls service, returns response.
+* **Routes**: Defines and binds Express routes with validators and controllers.
+* **Service**: Contains business logic. Only talks to repositories and returns DTOs.
+* **Repository**: Responsible for all database operations.
+* **Model/Entity**: Defines structure using a data mapper (e.g., MikroORM, Prisma, Mongoose).
+* **Validator**: Uses `class-validator`, `zod`, or `joi` to validate request data.
+* **Types/DTOs**: Declare input/output types using interfaces or classes.
+
+---
+
+## Error Handling
+
+* Use **custom error classes** (e.g., `BadRequestError`, `UnauthorizedError`).
+* Centralize error handling via a **global error middleware**.
+* Throw, don’t return, errors from services.
+* Only **catch errors** if you are:
+
+  * Adding context.
+  * Transforming expected outcomes.
+  * Letting the global handler deal with unexpected ones.
+
+---
+
+## Middleware
+
+* Use middlewares for:
+
+  * Auth, logging, request context, CORS, rate limiting, parsing, etc.
+* Keep them **pure** — don't couple with domain logic.
+
+---
+
+## Environment & Config
+
+* Use `.env` files with type-safe config parsing (e.g., `dotenv`, `env-var`, `zod`).
+* Centralize and validate config access via a `config.ts`.
+
+---
+
+## Testing
+
+* Use **Jest** for testing.
+* Follow **AAA (Arrange-Act-Assert)** pattern.
+* Structure tests by module and responsibility:
+
+  * Unit tests for services and controllers.
+  * Integration tests for routes using `supertest`.
+* Use test doubles (mocks, stubs) for internal dependencies.
+* Write a **smoke test** route per module: `GET /module/test`.
+
+Example structure:
+
+```
+/__tests__
+  /user
+    - user.controller.test.ts
+    - user.service.test.ts
+    - user.routes.test.ts
+```

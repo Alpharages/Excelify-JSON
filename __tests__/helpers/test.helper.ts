@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
-import { ExcelError } from '../../types/excel.types.js';
+import { ExcelError } from '../../src/types/excel.types.js';
 import * as XLSX from 'xlsx';
+import { jest } from '@jest/globals';
 
-export const mockRequest = (file?: Express.Multer.File) => {
+export const mockRequest = (file?: Express.Multer.File): Request => {
   const req = {
     file,
   } as Request;
@@ -30,7 +31,7 @@ export const createMockExcelError = (
   return error;
 };
 
-export const createMockExcelBuffer = (data: any[]): Buffer => {
+export const createMockExcelBuffer = <T extends Record<string, unknown>>(data: T[]): Buffer => {
   const worksheet = XLSX.utils.json_to_sheet(data);
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');

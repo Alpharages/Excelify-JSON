@@ -21,13 +21,18 @@ export interface ExcelMetadata {
 }
 
 /**
+ * Represents possible values in an Excel cell
+ */
+export type ExcelCellValue = string | number | boolean | Date | null;
+
+/**
  * Represents the complete response from processing an Excel file
  */
 export interface ExcelResponse {
   /** Metadata about the Excel file and its sheets */
   metadata: ExcelMetadata;
   /** The actual data from each sheet, keyed by sheet name */
-  data: Record<string, Record<string, any>[]>;
+  data: Record<string, Record<string, ExcelCellValue>[]>;
 }
 
 export interface ExcelError extends Error {
